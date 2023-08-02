@@ -14,6 +14,7 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,8 +29,8 @@ import com.example.zeko.viewmodel.PostViewModel
 @Composable
 fun PostListScreen(viewModel: PostViewModel, navController: NavController) {
 
-    val posts by viewModel.posts.collectAsState(initial = emptyList())
 
+    val posts by viewModel.posts.collectAsState(initial = emptyList())
 
 
     Column(
@@ -80,7 +81,7 @@ fun PostListScreen(viewModel: PostViewModel, navController: NavController) {
                 }
             } else {
                 items(items = posts) { item ->
-                    PostCard(item = item)
+                    PostCard(item = item,navController)
                 }
             }
 

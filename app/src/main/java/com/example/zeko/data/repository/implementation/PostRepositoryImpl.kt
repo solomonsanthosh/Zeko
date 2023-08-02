@@ -5,7 +5,9 @@ import android.util.Log
 import androidx.work.*
 import com.example.zeko.data.datasource.PostLocalDataSource
 import com.example.zeko.data.datasource.PostRemoteDataSource
-import com.example.zeko.data.model.Post
+import com.example.zeko.data.model.CommentEntity
+import com.example.zeko.data.model.PostEntity
+import com.example.zeko.data.model.PostLocalEntity
 import com.example.zeko.data.repository.PostRepository
 import com.example.zeko.data.worker.ScheduledPostWorker
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +23,7 @@ class PostRepositoryImpl(
     private val context:Application
 ) : PostRepository {
 
-    override suspend fun getPosts(): Flow<List<Post>> = flow {
+    override suspend fun getPosts(): Flow<List<PostEntity>> = flow {
 
 
         try {
@@ -40,10 +42,10 @@ class PostRepositoryImpl(
     }.flowOn(Dispatchers.IO)
 
 
-    override suspend fun savePosts(post: Post): Post? {
+    override suspend fun savePosts(post: PostLocalEntity): PostLocalEntity? {
 
 
-        var postResult: Post? = null
+        var postResult: PostLocalEntity? = null
         try {
             val response = postRemoteDataSource.savePostToApi(post)
             val body = response.body()
@@ -62,7 +64,28 @@ class PostRepositoryImpl(
 
     }
 
-    override suspend fun scedulePost(post: Post) {
+    override suspend fun saveComment(commentEntity: CommentEntity): CommentEntity? {
+        var result: CommentEntity? = null
+        try {
+            val response = postRemoteDataSource.saveCommentToApi(commentEntity)
+            val body = response.body()
+            result = if (body != null) {
+
+                body
+            } else {
+                null
+            }
+
+        } catch (exception: java.lang.Exception) {
+            return null
+        }
+
+        return result
+
+    }
+
+
+    override suspend fun scedulePost(post: PostLocalEntity) {
 
         postLocalDataSource.savePostToLocal(post).also {
 
@@ -71,21 +94,23 @@ class PostRepositoryImpl(
             val constraints  = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
             val workRequest = OneTimeWorkRequestBuilder<ScheduledPostWorker>().setConstraints(constraints).setInitialDelay(timeDelayMillis,TimeUnit.MILLISECONDS).build()
 
-            WorkManager.getInstance(context.applicationContext).enqueueUniqueWork(post.created_at.toString(),ExistingWorkPolicy.REPLACE,workRequest)        }
+            WorkManager.getInstance(context.applicationContext).enqueueUniqueWork(post.created_at.toString(),ExistingWorkPolicy.APPEND,workRequest)        }
 
 
     }
 
-    override suspend fun getScheduledPost(time: Long): Post? {
-        lateinit var post: Post
+    override suspend fun getScheduledPost(time: Long): PostLocalEntity? {
+        var post: PostLocalEntity? = null
         try {
 
-            post = postLocalDataSource.getPostFromLocal(time)
+            val beforetime = time - 1000 * 60 * 2
 
+            post = postLocalDataSource.getPostFromLocal(beforetime,time)
+            return post
         } catch (e: Exception) {
-            return null
+           return null
         }
-        return post
+
     }
 
 

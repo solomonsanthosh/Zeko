@@ -16,12 +16,10 @@ import javax.inject.Singleton
 class ApiModule {
 
 
-
-//    http://10.2.236.125:8080/
     @Singleton
     @Provides
     fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder().baseUrl("http://192.168.137.27:8080/")
+        return Retrofit.Builder().baseUrl("http://192.168.0.103:8080/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }

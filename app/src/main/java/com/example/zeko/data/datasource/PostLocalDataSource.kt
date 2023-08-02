@@ -1,13 +1,13 @@
 package com.example.zeko.data.datasource
 
-import com.example.zeko.data.model.Post
+import com.example.zeko.data.model.PostLocalEntity
 
 interface PostLocalDataSource {
 
-    suspend fun savePostToLocal(post: Post)
+    suspend fun savePostToLocal(post: PostLocalEntity)
 
 
-    fun getPostFromLocal(time: Long): Post
+    fun getPostFromLocal(beforetime:Long,time: Long): PostLocalEntity
 
 
 

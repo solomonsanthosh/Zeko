@@ -8,5 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cardBg">#FF374259</color>
+    <color name="postBg">#FF1A0000</color>
+
+    <color name="content">#FF6B728E</color>
     <color name="green">#FF5D9C59</color>
 </resources>

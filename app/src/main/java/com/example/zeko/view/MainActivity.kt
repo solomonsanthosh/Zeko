@@ -2,7 +2,6 @@ package com.example.zeko.view
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
@@ -10,13 +9,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.List
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.zeko.view.ui.theme.ZekoTheme
 import com.example.zeko.viewmodel.PostViewModel
@@ -25,11 +19,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.zeko.data.model.Post
-import com.example.zeko.data.model.User
-import com.example.zeko.view.ScreenRoute
+import com.example.zeko.data.model.PostEntity
+import com.example.zeko.data.model.PostLocalEntity
+import com.example.zeko.view.screens.CommentAddScreen
 import com.example.zeko.view.screens.PostAddScreen
 import com.example.zeko.view.screens.PostListScreen
+import com.example.zeko.view.screens.PostSingleScreen
 
 
 @AndroidEntryPoint
@@ -65,6 +60,15 @@ class MainActivity : ComponentActivity() {
                             composable(route = ScreenRoute.PostAddScreen.route) {
                                 PostAddScreen(viewModel, navController = navController)
                             }
+                            composable(route = ScreenRoute.CommentAddScreen.route) {
+                                val data = navController.previousBackStackEntry?.savedStateHandle?.get<PostEntity>("post")
+                                CommentAddScreen(viewModel,data,navController)
+                            }
+                            composable(route = ScreenRoute.PostSingleScreen.route) {
+                                val data = navController.previousBackStackEntry?.savedStateHandle?.get<PostEntity>("post")
+                                PostSingleScreen(data)
+                            }
+
                         }
 
                     }

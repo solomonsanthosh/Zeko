@@ -124,7 +124,7 @@ fun SchedulePostPopup(
                         mCalendar.set(dateArray.get(0).toInt(),dateArray.get(1).toInt(),dateArray.get(2).toInt(),timeArray.get(0).toInt(),timeArray.get(1).toInt())
                         onTimeSelected(mCalendar.timeInMillis)
                         onScheduled()
-                    } // Close the popup when the button is clicked
+                    }
                 ) {
                     Text(text = "Schedule", color = Color.White)
                 }

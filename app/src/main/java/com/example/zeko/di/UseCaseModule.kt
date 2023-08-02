@@ -1,10 +1,7 @@
 package com.example.zeko.di
 
 import com.example.zeko.data.repository.PostRepository
-import com.example.zeko.data.usecase.getPostsUseCase
-import com.example.zeko.data.usecase.getScheduledPostUseCase
-import com.example.zeko.data.usecase.savePostUseCase
-import com.example.zeko.data.usecase.scedulePostUseCase
+import com.example.zeko.data.usecase.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +24,12 @@ class UseCaseModule {
     @Provides
     fun provideSavePostUseCase(postRepository: PostRepository): savePostUseCase {
         return savePostUseCase(postRepository)
+
+    }
+    @Singleton
+    @Provides
+    fun provideSaveCommentUseCase(postRepository: PostRepository): saveCommentUseCase {
+        return saveCommentUseCase(postRepository)
 
     }
     @Singleton
