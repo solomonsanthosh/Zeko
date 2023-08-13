@@ -24,5 +24,17 @@ class PostRemoteDataSourceImpl(private val postService: PostService) : PostRemot
         return postService.getPosts()
     }
 
+    override suspend fun getPostsFromFollowingApi(id:String): Response<List<PostEntity>> {
+        return postService.getPostsFromFollowing(id)
+    }
+
+    override suspend fun getMyPosts(id: String): Response<List<PostEntity>> {
+        return postService.getMyPosts(id)
+    }
+
+    override suspend fun getMyComments(id: String): Response<List<CommentEntity>> {
+        return postService.getMyComments(id)
+    }
+
 
 }

@@ -8,21 +8,21 @@ import com.example.zeko.data.model.PostLocalEntity;
 public final class PostLocalDataSourceImpl implements com.example.zeko.data.datasource.PostLocalDataSource {
     private final com.example.zeko.data.db.PostDao postDao = null;
     
-    public PostLocalDataSourceImpl(@org.jetbrains.annotations.NotNull()
+    public PostLocalDataSourceImpl(@org.jetbrains.annotations.NotNull
     com.example.zeko.data.db.PostDao postDao) {
         super();
     }
     
-    @org.jetbrains.annotations.Nullable()
-    @java.lang.Override()
-    public java.lang.Object savePostToLocal(@org.jetbrains.annotations.NotNull()
-    com.example.zeko.data.model.PostLocalEntity post, @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    @java.lang.Override
+    public java.lang.Object savePostToLocal(@org.jetbrains.annotations.NotNull
+    com.example.zeko.data.model.PostLocalEntity post, @org.jetbrains.annotations.NotNull
     kotlin.coroutines.Continuation<? super kotlin.Unit> continuation) {
         return null;
     }
     
-    @org.jetbrains.annotations.NotNull()
-    @java.lang.Override()
+    @org.jetbrains.annotations.NotNull
+    @java.lang.Override
     public com.example.zeko.data.model.PostLocalEntity getPostFromLocal(long timebefore, long time) {
         return null;
     }

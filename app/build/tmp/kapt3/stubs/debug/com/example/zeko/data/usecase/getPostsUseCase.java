@@ -9,13 +9,13 @@ import kotlinx.coroutines.flow.Flow;
 public final class getPostsUseCase {
     private final com.example.zeko.data.repository.PostRepository postRepository = null;
     
-    public getPostsUseCase(@org.jetbrains.annotations.NotNull()
+    public getPostsUseCase(@org.jetbrains.annotations.NotNull
     com.example.zeko.data.repository.PostRepository postRepository) {
         super();
     }
     
-    @org.jetbrains.annotations.Nullable()
-    public final java.lang.Object execute(@org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    public final java.lang.Object execute(@org.jetbrains.annotations.NotNull
     kotlin.coroutines.Continuation<? super kotlinx.coroutines.flow.Flow<? extends java.util.List<com.example.zeko.data.model.PostEntity>>> continuation) {
         return null;
     }

@@ -10,6 +10,11 @@ package com.example.zeko.view
         object CommentAddScreen: ScreenRoute("comment_add_screen")
 
 
+        object LoginScreen: ScreenRoute("login_screen")
+
+        object AccountScreen: ScreenRoute("account_screen")
+
+
 
 
 

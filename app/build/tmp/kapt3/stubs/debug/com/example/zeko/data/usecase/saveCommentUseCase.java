@@ -8,14 +8,14 @@ import com.example.zeko.data.repository.PostRepository;
 public final class saveCommentUseCase {
     private final com.example.zeko.data.repository.PostRepository postRepository = null;
     
-    public saveCommentUseCase(@org.jetbrains.annotations.NotNull()
+    public saveCommentUseCase(@org.jetbrains.annotations.NotNull
     com.example.zeko.data.repository.PostRepository postRepository) {
         super();
     }
     
-    @org.jetbrains.annotations.Nullable()
-    public final java.lang.Object execute(@org.jetbrains.annotations.NotNull()
-    com.example.zeko.data.model.CommentEntity commentEntity, @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    public final java.lang.Object execute(@org.jetbrains.annotations.NotNull
+    com.example.zeko.data.model.CommentEntity commentEntity, @org.jetbrains.annotations.NotNull
     kotlin.coroutines.Continuation<? super com.example.zeko.data.model.CommentEntity> continuation) {
         return null;
     }

@@ -31,7 +31,7 @@ fun PostSingleScreen(data: PostEntity?) {
             Column(){
 
                 if (data != null) {
-                    Text(text = "(${data.user})",
+                    Text(text = "(${data.user.name})",
 
                         color = Color.Yellow,
                         modifier = Modifier.padding(top = 5.dp),
@@ -65,7 +65,7 @@ fun PostSingleScreen(data: PostEntity?) {
                 Column(modifier = Modifier.padding(start = 10.dp, top = 10.dp, end = 5.dp)){
 
 
-                    Text(text = "(${it.user})",color = colorResource(id = R.color.teal_700),fontSize = 15.sp, modifier = Modifier.padding(bottom = 2.dp))
+                    Text(text = "(${it.user.name})",color = colorResource(id = R.color.teal_700),fontSize = 15.sp, modifier = Modifier.padding(bottom = 2.dp))
                     Text(text = it.content)
                     Divider(color = Color.DarkGray, thickness = 2.dp, modifier = Modifier.padding(top = 8.dp))
 

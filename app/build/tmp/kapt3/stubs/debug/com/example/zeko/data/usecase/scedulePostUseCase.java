@@ -7,14 +7,14 @@ import com.example.zeko.data.repository.PostRepository;
 public final class scedulePostUseCase {
     private final com.example.zeko.data.repository.PostRepository postRepository = null;
     
-    public scedulePostUseCase(@org.jetbrains.annotations.NotNull()
+    public scedulePostUseCase(@org.jetbrains.annotations.NotNull
     com.example.zeko.data.repository.PostRepository postRepository) {
         super();
     }
     
-    @org.jetbrains.annotations.Nullable()
-    public final java.lang.Object execute(@org.jetbrains.annotations.NotNull()
-    com.example.zeko.data.model.PostLocalEntity post, @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.Nullable
+    public final java.lang.Object execute(@org.jetbrains.annotations.NotNull
+    com.example.zeko.data.model.PostLocalEntity post, @org.jetbrains.annotations.NotNull
     kotlin.coroutines.Continuation<? super kotlin.Unit> continuation) {
         return null;
     }

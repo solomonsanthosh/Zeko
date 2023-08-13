@@ -3,23 +3,24 @@ package com.example.zeko.viewmodel
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.lifecycle.MutableLiveData
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.zeko.data.model.CommentEntity
 import com.example.zeko.data.model.PostEntity
 import com.example.zeko.data.model.PostLocalEntity
-import com.example.zeko.data.model.User
+import com.example.zeko.data.model.UserEntity
+import com.example.zeko.data.usecase.getMyCommentsUseCase
+import com.example.zeko.data.usecase.getMyPostsUseCase
+import com.example.zeko.data.usecase.getPostFromFollowingUseCase
 import com.example.zeko.data.usecase.getPostsUseCase
 import com.example.zeko.data.usecase.saveCommentUseCase
 import com.example.zeko.data.usecase.savePostUseCase
 import com.example.zeko.data.usecase.scedulePostUseCase
+import com.example.zeko.utils.notification.NotificationService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,8 +31,13 @@ class PostViewModel @Inject constructor(
     private val getPostsUseCase: getPostsUseCase,
     private val scedulePostUseCase: scedulePostUseCase,
     private val saveCommentUseCase: saveCommentUseCase,
+    private val getPostFromFollowingUseCase: getPostFromFollowingUseCase,
+    private val getMyPostsUseCase: getMyPostsUseCase,
+    private val getMyCommentsUseCase: getMyCommentsUseCase,
+    val notificationService: NotificationService,
     val context: Application
 ) : ViewModel() {
+
 
 
 
@@ -40,6 +46,8 @@ class PostViewModel @Inject constructor(
     val posts: StateFlow<List<PostEntity>> get() = _posts
 
 
+
+    var comments = MutableStateFlow<MutableList<CommentEntity>>(mutableListOf())
 
 
     //user
@@ -59,43 +67,32 @@ class PostViewModel @Inject constructor(
 
     }
 
-
-    fun getUser(): User? {
-
-
-        val name = usersharedPref.getString("name", "")
-        val email = usersharedPref.getString("email", "")
-
-        val user = if (name!!.length > 0 && email!!.length > 0) {
-            User(name, email)
-        } else {
-            null
+    fun getPostsFromFollowing(id:String) {
+        viewModelScope.launch {
+            getPostFromFollowingUseCase.execute(id).collect {
+                _posts.value = it.toMutableList()
+            }
         }
-        return user
-
 
     }
 
-    fun saveUser(user: User): String {
-
-        try {
-
-            val editor = usersharedPref.edit()
-            editor.putString("name", user.name)
-            editor.putString("email", user.email)
-            editor.apply()
-
-        } catch (e: Exception) {
-            return e.localizedMessage ?: "Error"
+    fun getMyPosts(id:String) {
+        Log.d("ID",id)
+        viewModelScope.launch {
+            getMyPostsUseCase.execute(id).collect {
+                _posts.value = it.toMutableList()
+            }
         }
-        return "Credentials saved successfully"
-
 
     }
+
+
+
 
     fun savePost(post: PostLocalEntity) {
         viewModelScope.launch {
             savePostUseCase.execute(post).also {
+                notificationService.showNotification(post.title)
                 getPosts()
             }
 
@@ -105,6 +102,7 @@ class PostViewModel @Inject constructor(
     fun saveComment(postId:String,commentEntity: CommentEntity) {
         viewModelScope.launch {
             val res = saveCommentUseCase.execute(commentEntity)
+            Log.d("Comment",commentEntity.toString())
             val posts = _posts.value
             val postToUpdate = posts.find { it.id == postId }
             postToUpdate?.let {
@@ -130,7 +128,13 @@ class PostViewModel @Inject constructor(
     }
 
 
-    fun updateComment(postId: String) {
+    fun getMyComments(id: String) {
+
+        viewModelScope.launch {
+             getMyCommentsUseCase.execute(id).collect {
+               comments.value = it.toMutableList()
+           }
+        }
 
 
     }

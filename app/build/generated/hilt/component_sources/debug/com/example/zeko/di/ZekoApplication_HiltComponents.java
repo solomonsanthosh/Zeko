@@ -1,9 +1,10 @@
 package com.example.zeko.di;
 
 import androidx.hilt.work.HiltWrapper_WorkerFactoryModule;
-import com.example.zeko.data.worker.ScheduledPostWorker_HiltModule;
+import com.example.zeko.utils.worker.ScheduledPostWorker_HiltModule;
 import com.example.zeko.view.MainActivity_GeneratedInjector;
 import com.example.zeko.viewmodel.PostViewModel_HiltModules;
+import com.example.zeko.viewmodel.UserViewModel_HiltModules;
 import dagger.Binds;
 import dagger.Component;
 import dagger.Module;
@@ -123,6 +124,7 @@ public final class ZekoApplication_HiltComponents {
           DBModule.class,
           HiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule.class,
           HiltWrapper_WorkerFactoryModule.class,
+          NotificationModule.class,
           ScheduledPostWorker_HiltModule.class,
           UseCaseModule.class,
           ActivityRetainedCBuilderModule.class,
@@ -152,6 +154,7 @@ public final class ZekoApplication_HiltComponents {
       modules = {
           HiltWrapper_ActivityRetainedComponentManager_LifecycleModule.class,
           PostViewModel_HiltModules.KeyModule.class,
+          UserViewModel_HiltModules.KeyModule.class,
           ActivityCBuilderModule.class,
           ViewModelCBuilderModule.class
       }
@@ -190,7 +193,8 @@ public final class ZekoApplication_HiltComponents {
   @Subcomponent(
       modules = {
           HiltWrapper_HiltViewModelFactory_ViewModelModule.class,
-          PostViewModel_HiltModules.BindsModule.class
+          PostViewModel_HiltModules.BindsModule.class,
+          UserViewModel_HiltModules.BindsModule.class
       }
   )
   @ViewModelScoped

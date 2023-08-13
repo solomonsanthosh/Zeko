@@ -14,19 +14,25 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.zeko.R
 import com.example.zeko.data.model.PostEntity
-import com.example.zeko.data.model.PostLocalEntity
 import com.example.zeko.view.ScreenRoute
+import com.example.zeko.viewmodel.PostViewModel
+import com.example.zeko.viewmodel.UserViewModel
 
 
 @Composable
-fun PostCard(item: PostEntity, navController: NavController) {
+fun PostCard(
+    item: PostEntity,
+    navController: NavController,
+    viewModel: PostViewModel,
+    authViewModel: UserViewModel
+) {
 
+    val coroutineScope  = rememberCoroutineScope()
     Card(
 //        border = BorderStroke(1.dp,Color.LightGray),
         modifier = Modifier
@@ -48,14 +54,35 @@ fun PostCard(item: PostEntity, navController: NavController) {
                 .padding(15.dp)
         ) {
 
-            Text(
-                text = "(${item.user})",
+            Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    text = "(${item.user.name})",
 
-                color = Color.Yellow,
-                modifier = Modifier.padding(top = 5.dp),
-                fontWeight = FontWeight.Bold,
-                fontSize = 15.sp
-            )
+                    color = Color.Yellow,
+                    modifier = Modifier.padding(top = 5.dp),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp
+                )
+
+                    Text(modifier = Modifier
+                        .padding(top = 5.dp)
+                        .clickable {
+
+                            var type = "push"
+                            if (authViewModel.userLiveData.value?.id in item.user.followers) {
+                                type = "pull"
+                            }
+
+                                authViewModel.makeConnection(item.user.id,viewModel::getPosts,type)
+
+                        },text = if (authViewModel.userLiveData.value?.id in item.user.followers) {
+                        "following"
+                    } else {
+                        "follow"
+                    }, fontSize = 15.sp, color = Color.LightGray)
+
+            }
+
             Text(
                 text = item.title,
                 color = Color.LightGray,

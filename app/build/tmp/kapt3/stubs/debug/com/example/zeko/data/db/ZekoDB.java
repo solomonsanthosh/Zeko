@@ -12,6 +12,6 @@ public abstract class ZekoDB extends androidx.room.RoomDatabase {
         super();
     }
     
-    @org.jetbrains.annotations.NotNull()
+    @org.jetbrains.annotations.NotNull
     public abstract com.example.zeko.data.db.PostDao postDao();
 }

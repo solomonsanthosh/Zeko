@@ -2,10 +2,14 @@
 package com.example.zeko.viewmodel;
 
 import android.app.Application;
+import com.example.zeko.data.usecase.getMyCommentsUseCase;
+import com.example.zeko.data.usecase.getMyPostsUseCase;
+import com.example.zeko.data.usecase.getPostFromFollowingUseCase;
 import com.example.zeko.data.usecase.getPostsUseCase;
 import com.example.zeko.data.usecase.saveCommentUseCase;
 import com.example.zeko.data.usecase.savePostUseCase;
 import com.example.zeko.data.usecase.scedulePostUseCase;
+import com.example.zeko.utils.notification.NotificationService;
 import dagger.internal.DaggerGenerated;
 import dagger.internal.Factory;
 import dagger.internal.QualifierMetadata;
@@ -28,36 +32,59 @@ public final class PostViewModel_Factory implements Factory<PostViewModel> {
 
   private final Provider<saveCommentUseCase> saveCommentUseCaseProvider;
 
+  private final Provider<getPostFromFollowingUseCase> getPostFromFollowingUseCaseProvider;
+
+  private final Provider<getMyPostsUseCase> getMyPostsUseCaseProvider;
+
+  private final Provider<getMyCommentsUseCase> getMyCommentsUseCaseProvider;
+
+  private final Provider<NotificationService> notificationServiceProvider;
+
   private final Provider<Application> contextProvider;
 
   public PostViewModel_Factory(Provider<savePostUseCase> savePostUseCaseProvider,
       Provider<getPostsUseCase> getPostsUseCaseProvider,
       Provider<scedulePostUseCase> scedulePostUseCaseProvider,
       Provider<saveCommentUseCase> saveCommentUseCaseProvider,
+      Provider<getPostFromFollowingUseCase> getPostFromFollowingUseCaseProvider,
+      Provider<getMyPostsUseCase> getMyPostsUseCaseProvider,
+      Provider<getMyCommentsUseCase> getMyCommentsUseCaseProvider,
+      Provider<NotificationService> notificationServiceProvider,
       Provider<Application> contextProvider) {
     this.savePostUseCaseProvider = savePostUseCaseProvider;
     this.getPostsUseCaseProvider = getPostsUseCaseProvider;
     this.scedulePostUseCaseProvider = scedulePostUseCaseProvider;
     this.saveCommentUseCaseProvider = saveCommentUseCaseProvider;
+    this.getPostFromFollowingUseCaseProvider = getPostFromFollowingUseCaseProvider;
+    this.getMyPostsUseCaseProvider = getMyPostsUseCaseProvider;
+    this.getMyCommentsUseCaseProvider = getMyCommentsUseCaseProvider;
+    this.notificationServiceProvider = notificationServiceProvider;
     this.contextProvider = contextProvider;
   }
 
   @Override
   public PostViewModel get() {
-    return newInstance(savePostUseCaseProvider.get(), getPostsUseCaseProvider.get(), scedulePostUseCaseProvider.get(), saveCommentUseCaseProvider.get(), contextProvider.get());
+    return newInstance(savePostUseCaseProvider.get(), getPostsUseCaseProvider.get(), scedulePostUseCaseProvider.get(), saveCommentUseCaseProvider.get(), getPostFromFollowingUseCaseProvider.get(), getMyPostsUseCaseProvider.get(), getMyCommentsUseCaseProvider.get(), notificationServiceProvider.get(), contextProvider.get());
   }
 
   public static PostViewModel_Factory create(Provider<savePostUseCase> savePostUseCaseProvider,
       Provider<getPostsUseCase> getPostsUseCaseProvider,
       Provider<scedulePostUseCase> scedulePostUseCaseProvider,
       Provider<saveCommentUseCase> saveCommentUseCaseProvider,
+      Provider<getPostFromFollowingUseCase> getPostFromFollowingUseCaseProvider,
+      Provider<getMyPostsUseCase> getMyPostsUseCaseProvider,
+      Provider<getMyCommentsUseCase> getMyCommentsUseCaseProvider,
+      Provider<NotificationService> notificationServiceProvider,
       Provider<Application> contextProvider) {
-    return new PostViewModel_Factory(savePostUseCaseProvider, getPostsUseCaseProvider, scedulePostUseCaseProvider, saveCommentUseCaseProvider, contextProvider);
+    return new PostViewModel_Factory(savePostUseCaseProvider, getPostsUseCaseProvider, scedulePostUseCaseProvider, saveCommentUseCaseProvider, getPostFromFollowingUseCaseProvider, getMyPostsUseCaseProvider, getMyCommentsUseCaseProvider, notificationServiceProvider, contextProvider);
   }
 
   public static PostViewModel newInstance(savePostUseCase savePostUseCase,
       getPostsUseCase getPostsUseCase, scedulePostUseCase scedulePostUseCase,
-      saveCommentUseCase saveCommentUseCase, Application context) {
-    return new PostViewModel(savePostUseCase, getPostsUseCase, scedulePostUseCase, saveCommentUseCase, context);
+      saveCommentUseCase saveCommentUseCase,
+      getPostFromFollowingUseCase getPostFromFollowingUseCase, getMyPostsUseCase getMyPostsUseCase,
+      getMyCommentsUseCase getMyCommentsUseCase, NotificationService notificationService,
+      Application context) {
+    return new PostViewModel(savePostUseCase, getPostsUseCase, scedulePostUseCase, saveCommentUseCase, getPostFromFollowingUseCase, getMyPostsUseCase, getMyCommentsUseCase, notificationService, context);
   }
 }

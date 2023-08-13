@@ -9,7 +9,7 @@ import com.example.zeko.data.model.CommentEntity
 import com.example.zeko.data.model.PostEntity
 import com.example.zeko.data.model.PostLocalEntity
 import com.example.zeko.data.repository.PostRepository
-import com.example.zeko.data.worker.ScheduledPostWorker
+import com.example.zeko.utils.worker.ScheduledPostWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -41,6 +41,57 @@ class PostRepositoryImpl(
 
     }.flowOn(Dispatchers.IO)
 
+    override suspend fun getMyPosts(id: String): Flow<List<PostEntity>> = flow {
+        try {
+            val response = postRemoteDataSource.getMyPosts(id)
+            val body = response.body()
+            if (body != null) {
+                Log.d("myine",body.toString())
+                emit(body)
+            }
+
+        } catch (exception: java.lang.Exception) {
+            emit(emptyList())
+        }
+
+
+    }.flowOn(Dispatchers.IO)
+
+    override suspend fun getMyComments(id: String): Flow<List<CommentEntity>> = flow {
+            try {
+                val response = postRemoteDataSource.getMyComments(id)
+                val body = response.body()
+                if (body != null) {
+                    Log.d("myine",body.toString())
+                    emit(body)
+                }
+
+            } catch (exception: java.lang.Exception) {
+                emit(emptyList())
+            }
+
+
+    }.flowOn(Dispatchers.IO)
+
+
+    override suspend fun getPostsFromFollowing(id: String): Flow<List<PostEntity>> =flow {
+
+        try {
+            val response = postRemoteDataSource.getPostsFromFollowingApi(id)
+            val body = response.body()
+            if (body != null) {
+
+                Log.d("FOLLOW",body.toString())
+                emit(body)
+            }
+
+        } catch (exception: java.lang.Exception) {
+            emit(emptyList())
+        }
+
+
+    }.flowOn(Dispatchers.IO)
+
 
     override suspend fun savePosts(post: PostLocalEntity): PostLocalEntity? {
 
@@ -50,6 +101,7 @@ class PostRepositoryImpl(
             val response = postRemoteDataSource.savePostToApi(post)
             val body = response.body()
             postResult = if (body != null) {
+
 
                 body
             } else {
@@ -69,6 +121,7 @@ class PostRepositoryImpl(
         try {
             val response = postRemoteDataSource.saveCommentToApi(commentEntity)
             val body = response.body()
+            Log.d("CommentBody",body.toString())
             result = if (body != null) {
 
                 body
@@ -77,6 +130,7 @@ class PostRepositoryImpl(
             }
 
         } catch (exception: java.lang.Exception) {
+            Log.d("CoomentError",exception.localizedMessage.toString())
             return null
         }
 

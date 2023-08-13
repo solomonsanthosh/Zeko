@@ -1,18 +1,14 @@
 package com.example.zeko.view.screens
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -30,15 +26,18 @@ import androidx.compose.ui.unit.sp
 import com.example.zeko.R
 
 import com.example.zeko.data.model.PostLocalEntity
-import com.example.zeko.view.ScreenRoute
 import com.example.zeko.viewmodel.PostViewModel
+import com.example.zeko.viewmodel.UserViewModel
 import java.util.*
-
 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PostAddScreen(viewModel: PostViewModel, navController: NavController) {
+fun PostAddScreen(
+    viewModel: PostViewModel,
+    navController: NavController,
+    authViewModel: UserViewModel,
+) {
 
     val context = LocalContext.current
 
@@ -66,7 +65,7 @@ fun ScdeduledSubmit(){
 
 
     if(title.length > 0 && content.length>0){
-        viewModel.scedulePost(PostLocalEntity(0,viewModel.getUser()!!.name,title,content,pickedTimeInMilli)).also {
+        viewModel.scedulePost(PostLocalEntity(0,authViewModel.userLiveData.value!!.id,title,content,pickedTimeInMilli)).also {
             Toast.makeText(context,"Post scheduled successfully",Toast.LENGTH_LONG).show()
 
             navController.popBackStack()
@@ -164,7 +163,7 @@ fun ScdeduledSubmit(){
                     viewModel.savePost(
                         PostLocalEntity(
                             0,
-                            viewModel.getUser()!!.name,
+                            authViewModel.userLiveData.value!!.id,
                             title,
                             content,
                             System.currentTimeMillis()

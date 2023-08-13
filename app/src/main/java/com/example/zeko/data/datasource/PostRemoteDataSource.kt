@@ -13,5 +13,11 @@ interface PostRemoteDataSource {
 
 
     suspend fun getPostsFromApi(): Response<List<PostEntity>>
+    suspend fun getPostsFromFollowingApi(id:String): Response<List<PostEntity>>
+
+    suspend fun getMyPosts(id:String): Response<List<PostEntity>>
+
+
+    suspend fun getMyComments(id:String): Response<List<CommentEntity>>
 
 }

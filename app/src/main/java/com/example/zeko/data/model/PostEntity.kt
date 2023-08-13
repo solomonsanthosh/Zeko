@@ -11,7 +11,7 @@ data class PostEntity (
 
     @SerializedName("_id")
     val id: String,
-    val user: String,
+    val user: @RawValue UserEntity,
     val title: String,
     val content: String,
 
