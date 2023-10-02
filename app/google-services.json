@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "70717522246",
+    "project_id": "zeko-49fa6",
+    "storage_bucket": "zeko-49fa6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:70717522246:android:17bc60fcfafe4260616547",
+        "android_client_info": {
+          "package_name": "com.example.zeko"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "70717522246-3o0b480ni5npplcrfppagmpd3uqrl10o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuLRPnYyOvz6FBrewmxk1Gfgxvt1Wp7Kw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "70717522246-3o0b480ni5npplcrfppagmpd3uqrl10o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
