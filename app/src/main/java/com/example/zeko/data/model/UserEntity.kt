@@ -8,6 +8,7 @@ data class UserEntity(
     val id: String,
     val name: String,
     val email: String,
+    val phone:Long,
     val following: List<String>,
     val followers: List<String>
 

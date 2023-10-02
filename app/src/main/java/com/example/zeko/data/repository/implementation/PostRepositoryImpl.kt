@@ -46,11 +46,12 @@ class PostRepositoryImpl(
             val response = postRemoteDataSource.getMyPosts(id)
             val body = response.body()
             if (body != null) {
-                Log.d("myine",body.toString())
+                Log.d("PostsM",body.toString())
                 emit(body)
             }
 
         } catch (exception: java.lang.Exception) {
+            Log.d("PostsM",exception.localizedMessage.toString())
             emit(emptyList())
         }
 
@@ -101,8 +102,6 @@ class PostRepositoryImpl(
             val response = postRemoteDataSource.savePostToApi(post)
             val body = response.body()
             postResult = if (body != null) {
-
-
                 body
             } else {
                 null
@@ -142,13 +141,16 @@ class PostRepositoryImpl(
     override suspend fun scedulePost(post: PostLocalEntity) {
 
         postLocalDataSource.savePostToLocal(post).also {
+            if(post.type == "scheduled") {
+                val timeDelayMillis  = post.created_at - System.currentTimeMillis()
+                Log.d("TimeD",timeDelayMillis.toString())
+                val constraints  = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
+                val workRequest = OneTimeWorkRequestBuilder<ScheduledPostWorker>().setConstraints(constraints).setInitialDelay(timeDelayMillis,TimeUnit.MILLISECONDS).build()
 
-            val timeDelayMillis  = post.created_at - System.currentTimeMillis()
-            Log.d("TimeD",timeDelayMillis.toString())
-            val constraints  = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-            val workRequest = OneTimeWorkRequestBuilder<ScheduledPostWorker>().setConstraints(constraints).setInitialDelay(timeDelayMillis,TimeUnit.MILLISECONDS).build()
+                WorkManager.getInstance(context.applicationContext).enqueueUniqueWork(post.created_at.toString(),ExistingWorkPolicy.APPEND,workRequest)        }
+            }
 
-            WorkManager.getInstance(context.applicationContext).enqueueUniqueWork(post.created_at.toString(),ExistingWorkPolicy.APPEND,workRequest)        }
+
 
 
     }
@@ -165,6 +167,24 @@ class PostRepositoryImpl(
            return null
         }
 
+    }
+
+    override suspend fun getPostsOffline(): List<PostLocalEntity>? {
+        var posts: List<PostLocalEntity>? = null
+        try {
+
+
+
+            posts = postLocalDataSource.getPostsOffline()
+            Log.d("OfflinePosts",posts.toString())
+            return posts
+        } catch (e: Exception) {
+            return null
+        }
+    }
+
+    override suspend fun deletePostFromOffline(id: Int) {
+        postLocalDataSource.deleteFromOffline(id)
     }
 
 

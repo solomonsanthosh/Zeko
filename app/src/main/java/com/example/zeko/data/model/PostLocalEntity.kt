@@ -13,6 +13,7 @@ data class PostLocalEntity(
     val title: String,
     val content: String,
     val created_at: Long,
+    val type:String
 
 
 

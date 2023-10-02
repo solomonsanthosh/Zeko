@@ -1,7 +1,7 @@
 package com.example.zeko.di
 
 import android.app.Application
-import com.example.zeko.data.api.AuthService
+import com.example.zeko.data.api.UserService
 import com.example.zeko.data.api.PostService
 import com.example.zeko.data.datasource.Implementation.PostLocalDataSourceImpl
 import com.example.zeko.data.datasource.Implementation.PostRemoteDataSourceImpl
@@ -53,7 +53,7 @@ class repoositoryModule {
 
     @Singleton
     @Provides
-    fun provideUserRepository(authService: AuthService): UserRepository {
+    fun provideUserRepository(authService: UserService): UserRepository {
         return UserRepositoryImpl(authService)
     }
 

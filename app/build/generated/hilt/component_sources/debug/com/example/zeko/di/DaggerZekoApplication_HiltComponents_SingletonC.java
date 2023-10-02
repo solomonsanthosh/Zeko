@@ -14,25 +14,30 @@ import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.work.ListenableWorker;
 import androidx.work.WorkerParameters;
-import com.example.zeko.data.api.AuthService;
 import com.example.zeko.data.api.PostService;
+import com.example.zeko.data.api.UserService;
 import com.example.zeko.data.datasource.PostLocalDataSource;
 import com.example.zeko.data.datasource.PostRemoteDataSource;
 import com.example.zeko.data.db.PostDao;
 import com.example.zeko.data.db.ZekoDB;
 import com.example.zeko.data.repository.PostRepository;
 import com.example.zeko.data.repository.UserRepository;
+import com.example.zeko.data.usecase.getFollowingUseCase;
 import com.example.zeko.data.usecase.getMyCommentsUseCase;
 import com.example.zeko.data.usecase.getMyPostsUseCase;
+import com.example.zeko.data.usecase.getOfflinePostsUseCase;
 import com.example.zeko.data.usecase.getPostFromFollowingUseCase;
 import com.example.zeko.data.usecase.getPostsUseCase;
 import com.example.zeko.data.usecase.getScheduledPostUseCase;
+import com.example.zeko.data.usecase.getUserByPhoneUseCase;
 import com.example.zeko.data.usecase.getUserUseCase;
 import com.example.zeko.data.usecase.makeConnectionUseCase;
 import com.example.zeko.data.usecase.saveCommentUseCase;
 import com.example.zeko.data.usecase.savePostUseCase;
 import com.example.zeko.data.usecase.scedulePostUseCase;
 import com.example.zeko.utils.notification.NotificationService;
+import com.example.zeko.utils.worker.BackOnlinePostWorker;
+import com.example.zeko.utils.worker.BackOnlinePostWorker_AssistedFactory;
 import com.example.zeko.utils.worker.ScheduledPostWorker;
 import com.example.zeko.utils.worker.ScheduledPostWorker_AssistedFactory;
 import com.example.zeko.view.MainActivity;
@@ -530,7 +535,7 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
           return (T) new PostViewModel(singletonCImpl.provideSavePostUseCaseProvider.get(), singletonCImpl.provideGetPostUseCaseProvider.get(), singletonCImpl.provideSchedulePostUseCaseProvider.get(), singletonCImpl.provideSaveCommentUseCaseProvider.get(), singletonCImpl.provideGetPostFromFollowingUseCaseProvider.get(), singletonCImpl.provideGetMyPostUseCaseProvider.get(), singletonCImpl.provideGetMyCommentsUseCaseProvider.get(), singletonCImpl.provideNotificationServiceProvider.get(), ApplicationContextModule_ProvideApplicationFactory.provideApplication(singletonCImpl.applicationContextModule));
 
           case 1: // com.example.zeko.viewmodel.UserViewModel 
-          return (T) new UserViewModel(singletonCImpl.provideGetUserUseCaseProvider.get(), singletonCImpl.provideMakeConnectionUseCaseProvider.get());
+          return (T) new UserViewModel(singletonCImpl.provideGetUserUseCaseProvider.get(), singletonCImpl.provideFollowingsUseCaseProvider.get(), singletonCImpl.provideMakeConnectionUseCaseProvider.get(), singletonCImpl.provideGetUserByPhoneUseCaseProvider.get());
 
           default: throw new AssertionError(id);
         }
@@ -635,6 +640,10 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
 
     private Provider<PostRepository> providePostRepositoryProvider;
 
+    private Provider<getOfflinePostsUseCase> provideGetOfflinePostsProvider;
+
+    private Provider<BackOnlinePostWorker_AssistedFactory> backOnlinePostWorker_AssistedFactoryProvider;
+
     private Provider<getScheduledPostUseCase> provideGetScheduledPostUseCaseProvider;
 
     private Provider<savePostUseCase> provideSavePostUseCaseProvider;
@@ -655,13 +664,17 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
 
     private Provider<getMyCommentsUseCase> provideGetMyCommentsUseCaseProvider;
 
-    private Provider<AuthService> provideAuthServiceProvider;
+    private Provider<UserService> provideAuthServiceProvider;
 
     private Provider<UserRepository> provideUserRepositoryProvider;
 
     private Provider<getUserUseCase> provideGetUserUseCaseProvider;
 
+    private Provider<getFollowingUseCase> provideFollowingsUseCaseProvider;
+
     private Provider<makeConnectionUseCase> provideMakeConnectionUseCaseProvider;
+
+    private Provider<getUserByPhoneUseCase> provideGetUserByPhoneUseCaseProvider;
 
     private SingletonCImpl(ApiModule apiModuleParam,
         ApplicationContextModule applicationContextModuleParam, DBModule dBModuleParam,
@@ -679,7 +692,7 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
 
     private Map<String, Provider<WorkerAssistedFactory<? extends ListenableWorker>>> mapOfStringAndProviderOfWorkerAssistedFactoryOf(
         ) {
-      return Collections.<String, Provider<WorkerAssistedFactory<? extends ListenableWorker>>>singletonMap("com.example.zeko.utils.worker.ScheduledPostWorker", ((Provider) scheduledPostWorker_AssistedFactoryProvider));
+      return MapBuilder.<String, Provider<WorkerAssistedFactory<? extends ListenableWorker>>>newMapBuilder(2).put("com.example.zeko.utils.worker.BackOnlinePostWorker", ((Provider) backOnlinePostWorker_AssistedFactoryProvider)).put("com.example.zeko.utils.worker.ScheduledPostWorker", ((Provider) scheduledPostWorker_AssistedFactoryProvider)).build();
     }
 
     private HiltWorkerFactory hiltWorkerFactory() {
@@ -698,20 +711,24 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
       this.providePostDaoProvider = DoubleCheck.provider(new SwitchingProvider<PostDao>(singletonCImpl, 7));
       this.providePostLocalDataSourceProvider = DoubleCheck.provider(new SwitchingProvider<PostLocalDataSource>(singletonCImpl, 6));
       this.providePostRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<PostRepository>(singletonCImpl, 2));
-      this.provideGetScheduledPostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getScheduledPostUseCase>(singletonCImpl, 1));
-      this.provideSavePostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<savePostUseCase>(singletonCImpl, 9));
-      this.provideNotificationServiceProvider = DoubleCheck.provider(new SwitchingProvider<NotificationService>(singletonCImpl, 10));
-      this.scheduledPostWorker_AssistedFactoryProvider = SingleCheck.provider(new SwitchingProvider<ScheduledPostWorker_AssistedFactory>(singletonCImpl, 0));
-      this.provideGetPostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getPostsUseCase>(singletonCImpl, 11));
-      this.provideSchedulePostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<scedulePostUseCase>(singletonCImpl, 12));
-      this.provideSaveCommentUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<saveCommentUseCase>(singletonCImpl, 13));
-      this.provideGetPostFromFollowingUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getPostFromFollowingUseCase>(singletonCImpl, 14));
-      this.provideGetMyPostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getMyPostsUseCase>(singletonCImpl, 15));
-      this.provideGetMyCommentsUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getMyCommentsUseCase>(singletonCImpl, 16));
-      this.provideAuthServiceProvider = DoubleCheck.provider(new SwitchingProvider<AuthService>(singletonCImpl, 19));
-      this.provideUserRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserRepository>(singletonCImpl, 18));
-      this.provideGetUserUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getUserUseCase>(singletonCImpl, 17));
-      this.provideMakeConnectionUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<makeConnectionUseCase>(singletonCImpl, 20));
+      this.provideGetOfflinePostsProvider = DoubleCheck.provider(new SwitchingProvider<getOfflinePostsUseCase>(singletonCImpl, 1));
+      this.backOnlinePostWorker_AssistedFactoryProvider = SingleCheck.provider(new SwitchingProvider<BackOnlinePostWorker_AssistedFactory>(singletonCImpl, 0));
+      this.provideGetScheduledPostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getScheduledPostUseCase>(singletonCImpl, 10));
+      this.provideSavePostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<savePostUseCase>(singletonCImpl, 11));
+      this.provideNotificationServiceProvider = DoubleCheck.provider(new SwitchingProvider<NotificationService>(singletonCImpl, 12));
+      this.scheduledPostWorker_AssistedFactoryProvider = SingleCheck.provider(new SwitchingProvider<ScheduledPostWorker_AssistedFactory>(singletonCImpl, 9));
+      this.provideGetPostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getPostsUseCase>(singletonCImpl, 13));
+      this.provideSchedulePostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<scedulePostUseCase>(singletonCImpl, 14));
+      this.provideSaveCommentUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<saveCommentUseCase>(singletonCImpl, 15));
+      this.provideGetPostFromFollowingUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getPostFromFollowingUseCase>(singletonCImpl, 16));
+      this.provideGetMyPostUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getMyPostsUseCase>(singletonCImpl, 17));
+      this.provideGetMyCommentsUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getMyCommentsUseCase>(singletonCImpl, 18));
+      this.provideAuthServiceProvider = DoubleCheck.provider(new SwitchingProvider<UserService>(singletonCImpl, 21));
+      this.provideUserRepositoryProvider = DoubleCheck.provider(new SwitchingProvider<UserRepository>(singletonCImpl, 20));
+      this.provideGetUserUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getUserUseCase>(singletonCImpl, 19));
+      this.provideFollowingsUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getFollowingUseCase>(singletonCImpl, 22));
+      this.provideMakeConnectionUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<makeConnectionUseCase>(singletonCImpl, 23));
+      this.provideGetUserByPhoneUseCaseProvider = DoubleCheck.provider(new SwitchingProvider<getUserByPhoneUseCase>(singletonCImpl, 24));
     }
 
     @Override
@@ -754,16 +771,16 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
       @Override
       public T get() {
         switch (id) {
-          case 0: // com.example.zeko.utils.worker.ScheduledPostWorker_AssistedFactory 
-          return (T) new ScheduledPostWorker_AssistedFactory() {
+          case 0: // com.example.zeko.utils.worker.BackOnlinePostWorker_AssistedFactory 
+          return (T) new BackOnlinePostWorker_AssistedFactory() {
             @Override
-            public ScheduledPostWorker create(Context context, WorkerParameters workerParameters) {
-              return new ScheduledPostWorker(context, workerParameters, singletonCImpl.provideGetScheduledPostUseCaseProvider.get(), singletonCImpl.provideSavePostUseCaseProvider.get(), singletonCImpl.provideNotificationServiceProvider.get());
+            public BackOnlinePostWorker create(Context context, WorkerParameters workerParameters) {
+              return new BackOnlinePostWorker(context, workerParameters, singletonCImpl.provideGetOfflinePostsProvider.get());
             }
           };
 
-          case 1: // com.example.zeko.data.usecase.getScheduledPostUseCase 
-          return (T) UseCaseModule_ProvideGetScheduledPostUseCaseFactory.provideGetScheduledPostUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
+          case 1: // com.example.zeko.data.usecase.getOfflinePostsUseCase 
+          return (T) UseCaseModule_ProvideGetOfflinePostsFactory.provideGetOfflinePosts(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
           case 2: // com.example.zeko.data.repository.PostRepository 
           return (T) repoositoryModule_ProvidePostRepositoryFactory.providePostRepository(singletonCImpl.repoositoryModule, singletonCImpl.providePostRemoteDataSourceProvider.get(), singletonCImpl.providePostLocalDataSourceProvider.get(), ApplicationContextModule_ProvideApplicationFactory.provideApplication(singletonCImpl.applicationContextModule));
@@ -786,41 +803,59 @@ public final class DaggerZekoApplication_HiltComponents_SingletonC {
           case 8: // com.example.zeko.data.db.ZekoDB 
           return (T) DBModule_ProvideRoomDBFactory.provideRoomDB(singletonCImpl.dBModule, ApplicationContextModule_ProvideApplicationFactory.provideApplication(singletonCImpl.applicationContextModule));
 
-          case 9: // com.example.zeko.data.usecase.savePostUseCase 
+          case 9: // com.example.zeko.utils.worker.ScheduledPostWorker_AssistedFactory 
+          return (T) new ScheduledPostWorker_AssistedFactory() {
+            @Override
+            public ScheduledPostWorker create(Context context2,
+                WorkerParameters workerParameters2) {
+              return new ScheduledPostWorker(context2, workerParameters2, singletonCImpl.provideGetScheduledPostUseCaseProvider.get(), singletonCImpl.provideSavePostUseCaseProvider.get(), singletonCImpl.provideNotificationServiceProvider.get());
+            }
+          };
+
+          case 10: // com.example.zeko.data.usecase.getScheduledPostUseCase 
+          return (T) UseCaseModule_ProvideGetScheduledPostUseCaseFactory.provideGetScheduledPostUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
+
+          case 11: // com.example.zeko.data.usecase.savePostUseCase 
           return (T) UseCaseModule_ProvideSavePostUseCaseFactory.provideSavePostUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 10: // com.example.zeko.utils.notification.NotificationService 
+          case 12: // com.example.zeko.utils.notification.NotificationService 
           return (T) NotificationModule_ProvideNotificationServiceFactory.provideNotificationService(singletonCImpl.notificationModule, ApplicationContextModule_ProvideApplicationFactory.provideApplication(singletonCImpl.applicationContextModule));
 
-          case 11: // com.example.zeko.data.usecase.getPostsUseCase 
+          case 13: // com.example.zeko.data.usecase.getPostsUseCase 
           return (T) UseCaseModule_ProvideGetPostUseCaseFactory.provideGetPostUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 12: // com.example.zeko.data.usecase.scedulePostUseCase 
+          case 14: // com.example.zeko.data.usecase.scedulePostUseCase 
           return (T) UseCaseModule_ProvideSchedulePostUseCaseFactory.provideSchedulePostUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 13: // com.example.zeko.data.usecase.saveCommentUseCase 
+          case 15: // com.example.zeko.data.usecase.saveCommentUseCase 
           return (T) UseCaseModule_ProvideSaveCommentUseCaseFactory.provideSaveCommentUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 14: // com.example.zeko.data.usecase.getPostFromFollowingUseCase 
+          case 16: // com.example.zeko.data.usecase.getPostFromFollowingUseCase 
           return (T) UseCaseModule_ProvideGetPostFromFollowingUseCaseFactory.provideGetPostFromFollowingUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 15: // com.example.zeko.data.usecase.getMyPostsUseCase 
+          case 17: // com.example.zeko.data.usecase.getMyPostsUseCase 
           return (T) UseCaseModule_ProvideGetMyPostUseCaseFactory.provideGetMyPostUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 16: // com.example.zeko.data.usecase.getMyCommentsUseCase 
+          case 18: // com.example.zeko.data.usecase.getMyCommentsUseCase 
           return (T) UseCaseModule_ProvideGetMyCommentsUseCaseFactory.provideGetMyCommentsUseCase(singletonCImpl.useCaseModule, singletonCImpl.providePostRepositoryProvider.get());
 
-          case 17: // com.example.zeko.data.usecase.getUserUseCase 
+          case 19: // com.example.zeko.data.usecase.getUserUseCase 
           return (T) UseCaseModule_ProvideGetUserUseCaseFactory.provideGetUserUseCase(singletonCImpl.useCaseModule, singletonCImpl.provideUserRepositoryProvider.get());
 
-          case 18: // com.example.zeko.data.repository.UserRepository 
+          case 20: // com.example.zeko.data.repository.UserRepository 
           return (T) repoositoryModule_ProvideUserRepositoryFactory.provideUserRepository(singletonCImpl.repoositoryModule, singletonCImpl.provideAuthServiceProvider.get());
 
-          case 19: // com.example.zeko.data.api.AuthService 
+          case 21: // com.example.zeko.data.api.UserService 
           return (T) ApiModule_ProvideAuthServiceFactory.provideAuthService(singletonCImpl.apiModule, singletonCImpl.provideRetrofitProvider.get());
 
-          case 20: // com.example.zeko.data.usecase.makeConnectionUseCase 
+          case 22: // com.example.zeko.data.usecase.getFollowingUseCase 
+          return (T) UseCaseModule_ProvideFollowingsUseCaseFactory.provideFollowingsUseCase(singletonCImpl.useCaseModule, singletonCImpl.provideUserRepositoryProvider.get());
+
+          case 23: // com.example.zeko.data.usecase.makeConnectionUseCase 
           return (T) UseCaseModule_ProvideMakeConnectionUseCaseFactory.provideMakeConnectionUseCase(singletonCImpl.useCaseModule, singletonCImpl.provideUserRepositoryProvider.get());
+
+          case 24: // com.example.zeko.data.usecase.getUserByPhoneUseCase 
+          return (T) UseCaseModule_ProvideGetUserByPhoneUseCaseFactory.provideGetUserByPhoneUseCase(singletonCImpl.useCaseModule, singletonCImpl.provideUserRepositoryProvider.get());
 
           default: throw new AssertionError(id);
         }

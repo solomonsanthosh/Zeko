@@ -17,8 +17,12 @@ interface PostRepository {
     suspend fun scedulePost(post: PostLocalEntity)
     suspend fun getScheduledPost(time:Long):PostLocalEntity?
 
+    suspend fun getPostsOffline():List<PostLocalEntity>?
 
 
+
+
+    suspend fun deletePostFromOffline(id:Int)
 
 
 }

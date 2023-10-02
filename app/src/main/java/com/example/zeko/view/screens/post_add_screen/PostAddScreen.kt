@@ -1,8 +1,6 @@
 package com.example.zeko.view.screens
 
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -26,17 +24,17 @@ import androidx.compose.ui.unit.sp
 import com.example.zeko.R
 
 import com.example.zeko.data.model.PostLocalEntity
+import com.example.zeko.utils.receiver.NetworkChecker
 import com.example.zeko.viewmodel.PostViewModel
 import com.example.zeko.viewmodel.UserViewModel
-import java.util.*
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PostAddScreen(
     viewModel: PostViewModel,
     navController: NavController,
     authViewModel: UserViewModel,
+    networkChecker: NetworkChecker,
 ) {
 
     val context = LocalContext.current
@@ -65,7 +63,7 @@ fun ScdeduledSubmit(){
 
 
     if(title.length > 0 && content.length>0){
-        viewModel.scedulePost(PostLocalEntity(0,authViewModel.userLiveData.value!!.id,title,content,pickedTimeInMilli)).also {
+        viewModel.savePostToLocal(PostLocalEntity(0,authViewModel.userLiveData.value!!.id,title,content,pickedTimeInMilli,"scheduled")).also {
             Toast.makeText(context,"Post scheduled successfully",Toast.LENGTH_LONG).show()
 
             navController.popBackStack()
@@ -159,16 +157,32 @@ fun ScdeduledSubmit(){
                 enabled = !title.isNullOrEmpty() && !content.isNullOrEmpty(),
                 onClick = {
 
-
-                    viewModel.savePost(
-                        PostLocalEntity(
-                            0,
-                            authViewModel.userLiveData.value!!.id,
-                            title,
-                            content,
-                            System.currentTimeMillis()
+                    val isConnected = networkChecker.execute()
+                    if(isConnected) {
+                        viewModel.savePost(
+                            PostLocalEntity(
+                                0,
+                                authViewModel.userLiveData.value!!.id,
+                                title,
+                                content,
+                                System.currentTimeMillis(),
+                                "online"
+                            )
                         )
-                    )
+                    }else {
+                        viewModel.savePostToLocal(
+                            PostLocalEntity(
+                                0,
+                                authViewModel.userLiveData.value!!.id,
+                                title,
+                                content,
+                                System.currentTimeMillis(),
+                                "offline"
+                            )
+                        )
+                    }
+
+
                     navController.popBackStack()
 
 

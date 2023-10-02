@@ -11,4 +11,10 @@ interface PostLocalDataSource {
 
 
 
+    suspend fun getPostsOffline(): List<PostLocalEntity>
+
+
+
+    suspend fun deleteFromOffline(id:Int)
+
 }

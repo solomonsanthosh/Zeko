@@ -64,7 +64,6 @@ class PostViewModel @Inject constructor(
                 _posts.value = it.toMutableList()
             }
         }
-
     }
 
     fun getPostsFromFollowing(id:String) {
@@ -110,7 +109,6 @@ class PostViewModel @Inject constructor(
                 comments.add(res!!)
                 it.comments = comments.toList()
             }
-//
             Log.d("FinalComment",res.toString())
 //        posts[index] = postToUpdate!!
 
@@ -121,7 +119,7 @@ class PostViewModel @Inject constructor(
 
 
     //sceduling
-    fun scedulePost(post: PostLocalEntity) {
+    fun savePostToLocal(post: PostLocalEntity) {
         viewModelScope.launch {
             scedulePostUseCase.execute(post)
         }

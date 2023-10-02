@@ -56,7 +56,7 @@ fun PostCard(
 
             Row(horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = "(${item.user.name})",
+                    text = "@${item.user.name}",
 
                     color = Color.Yellow,
                     modifier = Modifier.padding(top = 5.dp),
@@ -64,8 +64,11 @@ fun PostCard(
                     fontSize = 15.sp
                 )
 
+
+                if(authViewModel.userLiveData.value?.id != item.user.id){
                     Text(modifier = Modifier
                         .padding(top = 5.dp)
+
                         .clickable {
 
                             var type = "push"
@@ -73,13 +76,15 @@ fun PostCard(
                                 type = "pull"
                             }
 
-                                authViewModel.makeConnection(item.user.id,viewModel::getPosts,type)
+                            authViewModel.makeConnection(item.user.id,viewModel::getPosts,type)
 
                         },text = if (authViewModel.userLiveData.value?.id in item.user.followers) {
                         "following"
                     } else {
                         "follow"
                     }, fontSize = 15.sp, color = Color.LightGray)
+                }
+
 
             }
 

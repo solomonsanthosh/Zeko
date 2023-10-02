@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.zeko.view.ScreenRoute
 import com.example.zeko.view.screens.PostCard
 import com.example.zeko.viewmodel.PostViewModel
 import com.example.zeko.viewmodel.UserViewModel
@@ -70,8 +71,13 @@ fun AccountScreen(
 
             Text(text = "@${authViewModel.userLiveData.value!!.name}", color = Color.White, fontWeight = FontWeight.Black, fontSize = 18.sp, modifier = Modifier.padding(top=15.dp, start = 15.dp))
             Row(modifier = Modifier.padding(horizontal = 15.dp, vertical = 15.dp)) {
-                Text(text = "${authViewModel.userLiveData.value!!.followers.size} followers", color = Color.White, fontWeight = FontWeight.Medium, fontSize = 15.sp)
-                Text(text = "${authViewModel.userLiveData.value!!.following.size} following", color = Color.White, fontWeight = FontWeight.Medium, fontSize = 15.sp, modifier = Modifier.padding(start=10.dp))
+                Text(text = "${authViewModel.userLiveData.value!!.followers.size} followers", color = Color.White, fontWeight = FontWeight.Medium, fontSize = 15.sp, modifier = Modifier.clickable {
+
+                    navController.navigate("follow_screen/followers")
+                })
+                Text(text = "${authViewModel.userLiveData.value!!.following.size} following", color = Color.White, fontWeight = FontWeight.Medium, fontSize = 15.sp, modifier = Modifier.padding(start=10.dp).clickable{
+                    navController.navigate("follow_screen/following")
+                })
 
             }
             Divider(color = Color.White, thickness = 1.dp)

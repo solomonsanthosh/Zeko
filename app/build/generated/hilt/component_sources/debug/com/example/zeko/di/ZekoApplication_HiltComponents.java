@@ -1,6 +1,7 @@
 package com.example.zeko.di;
 
 import androidx.hilt.work.HiltWrapper_WorkerFactoryModule;
+import com.example.zeko.utils.worker.BackOnlinePostWorker_HiltModule;
 import com.example.zeko.utils.worker.ScheduledPostWorker_HiltModule;
 import com.example.zeko.view.MainActivity_GeneratedInjector;
 import com.example.zeko.viewmodel.PostViewModel_HiltModules;
@@ -121,6 +122,7 @@ public final class ZekoApplication_HiltComponents {
       modules = {
           ApiModule.class,
           ApplicationContextModule.class,
+          BackOnlinePostWorker_HiltModule.class,
           DBModule.class,
           HiltWrapper_FragmentGetContextFix_FragmentGetContextFixModule.class,
           HiltWrapper_WorkerFactoryModule.class,

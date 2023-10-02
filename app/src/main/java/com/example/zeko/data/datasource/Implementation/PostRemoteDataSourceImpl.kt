@@ -5,6 +5,7 @@ import com.example.zeko.data.datasource.PostRemoteDataSource
 import com.example.zeko.data.model.CommentEntity
 import com.example.zeko.data.model.PostEntity
 import com.example.zeko.data.model.PostLocalEntity
+import com.example.zeko.data.model.UserEntity
 import retrofit2.Response
 
 class PostRemoteDataSourceImpl(private val postService: PostService) : PostRemoteDataSource {
@@ -31,6 +32,8 @@ class PostRemoteDataSourceImpl(private val postService: PostService) : PostRemot
     override suspend fun getMyPosts(id: String): Response<List<PostEntity>> {
         return postService.getMyPosts(id)
     }
+
+
 
     override suspend fun getMyComments(id: String): Response<List<CommentEntity>> {
         return postService.getMyComments(id)

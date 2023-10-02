@@ -1,7 +1,7 @@
 package com.example.zeko.di
 
 import com.example.zeko.BuildConfig
-import com.example.zeko.data.api.AuthService
+import com.example.zeko.data.api.UserService
 import com.example.zeko.data.api.PostService
 import dagger.Module
 import dagger.Provides
@@ -33,8 +33,8 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideAuthService(retrofit: Retrofit): AuthService {
-        return retrofit.create(AuthService::class.java)
+    fun provideAuthService(retrofit: Retrofit): UserService {
+        return retrofit.create(UserService::class.java)
     }
 
 

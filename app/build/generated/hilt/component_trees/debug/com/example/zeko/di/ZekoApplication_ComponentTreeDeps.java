@@ -24,6 +24,7 @@ import hilt_aggregated_deps._com_example_zeko_di_NotificationModule;
 import hilt_aggregated_deps._com_example_zeko_di_UseCaseModule;
 import hilt_aggregated_deps._com_example_zeko_di_ZekoApplication_GeneratedInjector;
 import hilt_aggregated_deps._com_example_zeko_di_repoositoryModule;
+import hilt_aggregated_deps._com_example_zeko_utils_worker_BackOnlinePostWorker_HiltModule;
 import hilt_aggregated_deps._com_example_zeko_utils_worker_ScheduledPostWorker_HiltModule;
 import hilt_aggregated_deps._com_example_zeko_view_MainActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_example_zeko_viewmodel_PostViewModel_HiltModules_BindsModule;
@@ -76,6 +77,7 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _com_example_zeko_di_UseCaseModule.class,
         _com_example_zeko_di_ZekoApplication_GeneratedInjector.class,
         _com_example_zeko_di_repoositoryModule.class,
+        _com_example_zeko_utils_worker_BackOnlinePostWorker_HiltModule.class,
         _com_example_zeko_utils_worker_ScheduledPostWorker_HiltModule.class,
         _com_example_zeko_view_MainActivity_GeneratedInjector.class,
         _com_example_zeko_viewmodel_PostViewModel_HiltModules_BindsModule.class,

@@ -16,5 +16,13 @@ class PostLocalDataSourceImpl(private val postDao: PostDao) : PostLocalDataSourc
         return postDao.getPost(timebefore,time)
     }
 
+    override suspend fun getPostsOffline(): List<PostLocalEntity> {
+        return postDao.getPostsOffline()
+    }
+
+    override suspend fun deleteFromOffline(id:Int) {
+         postDao.deletePosts(id)
+    }
+
 
 }

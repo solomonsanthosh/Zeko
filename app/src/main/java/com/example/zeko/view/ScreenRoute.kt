@@ -14,6 +14,10 @@ package com.example.zeko.view
 
         object AccountScreen: ScreenRoute("account_screen")
 
+        object FollowersListScreen: ScreenRoute("follow_screen/{type}")
+
+        object ContactListScreen: ScreenRoute("contact_list_screen")
+
 
 
 

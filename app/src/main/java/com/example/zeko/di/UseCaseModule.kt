@@ -77,5 +77,29 @@ class UseCaseModule {
 
     }
 
+    @Singleton
+    @Provides
+    fun provideFollowingsUseCase(userRepository: UserRepository): getFollowingUseCase {
+        return getFollowingUseCase(userRepository)
+
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetUserByPhoneUseCase(userRepository: UserRepository): getUserByPhoneUseCase {
+        return getUserByPhoneUseCase(userRepository)
+
+    }
+
+
+
+    @Singleton
+    @Provides
+    fun provideGetOfflinePosts(postRepository: PostRepository): getOfflinePostsUseCase {
+        return getOfflinePostsUseCase(postRepository)
+
+    }
+
+
 
 }
